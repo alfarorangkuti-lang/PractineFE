@@ -1,3 +1,4 @@
+import Link from "next/link";
 export default function NavbarLandingPage() {
   return (
     <nav className="bg-primary px-6 md:px-12 py-2 flex items-center justify-between fixed w-full z-20">
@@ -6,13 +7,13 @@ export default function NavbarLandingPage() {
       {/* Menu */}
       <ul className="items-center gap-8 text-sm flex">
         <li className="text-white text-xl font-bold italic">
-          Practine
+          <Link href="/">Practine</Link>
         </li>
         <li className="hidden md:flex text-unactive hover:text-white cursor-pointer transition">
           Fitur
         </li>
         <li className="hidden md:flex text-unactive hover:text-white cursor-pointer transition">
-          Harga
+          <Link href="/price">Harga</Link>
         </li>
         <li className="hidden md:flex text-unactive hover:text-white cursor-pointer transition">
           Tentang Kami

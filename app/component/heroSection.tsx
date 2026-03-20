@@ -5,7 +5,7 @@ export default function HeroSection() {
       {/* Heading */}
       <h1 className="text-4xl md:text-6xl font-bold leading-tight text-animated-gradient max-w-4xl">
         Kelola Inventaris & Keuangan
-        <br className="hidden md:block" />
+        <br/>
         Bisnis Anda dalam Satu Platform
       </h1>
 

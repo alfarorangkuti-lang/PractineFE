@@ -1,17 +1,16 @@
-import Image from "next/image";
-import NavbarLandingPage from "./component/navbarLandingPage";
+'use client'
 import HeroSection from "./component/heroSection";
 import Pricing from "./component/pricing";
-import FooterLandingPage from "./component/footerLandingPage";
 import Features from "./component/features";
+import LayoutLandingPage from "./component/layoutLandingPage";
 export default function Home() {
   return (
     <div>
-      <NavbarLandingPage />
-      <HeroSection />
-      <Features />
-      <Pricing />
-      <FooterLandingPage/>
+      <LayoutLandingPage>
+        <HeroSection />
+        <Features />
+        <Pricing />
+      </LayoutLandingPage>
     </div>
   );
 }
