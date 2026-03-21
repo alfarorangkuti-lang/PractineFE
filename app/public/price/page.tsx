@@ -1,6 +1,6 @@
 'use client'
 
-import LayoutLandingPage from "../../component/layoutLandingPage"
+import LayoutLandingPage from "../../component/public/layoutLandingPage"
 
 export default function Price() {
   return (
