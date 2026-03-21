@@ -49,7 +49,7 @@ export default function NavbarLandingPage() {
 
 
     {/* mobile */}
-    <nav className={`${isOpen ? 'flex' : 'hidden'} z-30 w-screen h-screen fixed py-2 px-6 bg-primary flex-col md:hidden justify-between`}>
+    <nav className={`${isOpen ? 'flex' : 'hidden'} z-30 w-screen h-screen fixed py-2 px-6 bg-primary flex-col md:hidden`}>
 
     {/* header */}
       <div className="flex justify-between"> 
@@ -77,7 +77,7 @@ export default function NavbarLandingPage() {
       </ul>
     
     {/* action */}
-    <div className="flex gap-4">
+    <div className="flex gap-4 mt-12">
         <Link href="/auth/register" className=" bg-black text-white text-sm px-4 py-2 rounded-lg hover:opacity-80 transition w-full text-center">
           Daftar
         </Link>
