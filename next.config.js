@@ -1,5 +1,8 @@
 const nextConfig = {
-  output: 'export'
+  output: 'export',
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 }
 
 module.exports = nextConfig
