@@ -1,6 +1,28 @@
+'use client'
+
 import Link from "next/link";
+import { useState } from "react";
+import { login } from "@/app/lib/api";
+import { useAuth } from "@/app/lib/useAuth";
+import { useRouter } from "next/navigation";
 import LayoutLandingPage from "@/app/component/public/layoutLandingPage";
 export default function Login(){
+    useAuth("guest")
+    const router = useRouter()
+    const [email, setEmail] = useState<string>('');
+    const [message, setMessage] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+
+    const handleLogin = async (email:string, password:string) => {
+        try{
+            const data = await login(email, password)
+            if (data.token){
+                router.push('/authed/dashboard')
+            }
+        } catch(err: any){
+            setMessage(err.response.data.message || 'login gagal')
+        }
+    }
     return (
         <LayoutLandingPage>
             <section className="h-screen w-full flex items-center justify-center bg-slate-100">
@@ -8,10 +30,12 @@ export default function Login(){
 
                         <h1 className="italic text-primary font-bold text-4xl text-center mb-2">Practine</h1>
                         <label className="text-sm" htmlFor="email">Email</label>
-                        <input type="email" name="email" id="" className="rounded w-full border-[0.5px] border-gray-400 focus:outline-none px-2 py-1" />
+                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} name="email" id="" className="rounded w-full border-[0.5px] border-gray-400 focus:outline-none px-2 py-1" />
+
                         <label className="text-sm" htmlFor="password">Password</label>
-                        <input type="password" name="password" id="" className="rounded w-full border-[0.5px] border-gray-400 focus:outline-none px-2 py-1" />
-                        <button className="p-1 bg-primary text-white text-center rounded mt-2">Login</button>
+                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}name="password" id="" className="rounded w-full border-[0.5px] border-gray-400 focus:outline-none px-2 py-1" />
+                        <p className={`${message ?'text-center text-red-600 text-sm my-2' : 'hidden'}`}>{message}</p>
+                        <button onClick={() => handleLogin(email, password)} className="p-1 bg-primary text-white text-center rounded mt-2">Login</button>
                         <div className="flex justify-between  mt-1">
                             <Link href="/auth/forgotPassword" className="underline text-gray-500 hover:text-gray-700 text-sm">Lupa password?</Link>
                             <Link href="/auth/register" className="underline text-gray-500 hover:text-gray-700 text-sm">Belum Punya Akun?</Link>

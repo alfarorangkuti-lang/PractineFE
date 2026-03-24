@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const axiosClient = axios.create({
-    baseURL: "https://api.karawanggadget.com/api",
+    baseURL: "http://127.0.0.1:8000/api",
     headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -20,17 +20,5 @@ axiosClient.interceptors.request.use((config) => {
 
     return config
 })
-
-// 🔥 handle global error (auto logout)
-axiosClient.interceptors.response.use(
-    (response) => response,
-    (error) => {
-        if (error.response?.status === 401) {
-            localStorage.removeItem("token")
-            window.location.href = "/auth/login"
-        }
-        return Promise.reject(error)
-    }
-)
 
 export default axiosClient

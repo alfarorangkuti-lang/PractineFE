@@ -4,6 +4,7 @@ import RegistrationComponent from "@/app/component/auth/registrationComponent"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { useState } from "react"
+import { useAuth } from "@/app/lib/useAuth"
 
 export default function Register(){
     const [fieldNamaLengkap, setFieldNamaLengkap] = useState<string>('')
@@ -11,10 +12,13 @@ export default function Register(){
     const [fieldEmail, setFieldEmail] = useState<string>('')
     const [fieldPassword, setFieldPassword] = useState<string>('')
     const [fieldPasswordConfirmation, setFieldPasswordConfirmation] = useState<string>('')
+    const [message, setMessage] = useState<string>('')
     const router = useRouter()
 
+    useAuth("guest")
+
     const submitRegister = async (name:string, business_name:string, email:string, password:string, password_confirmation:string) =>{
-        const res = await axiosClient.post("/register", {
+        try {const res = await axiosClient.post("/register", {
             name,
             business_name,
             email,
@@ -27,7 +31,14 @@ export default function Register(){
         if (localStorage.getItem("token") === token) {
             return router.push('/auth/verification')
         }
-        return res.data.token
+        } catch(err: any) {
+            if (err.response.data.message) {
+                setMessage(err.response.data.message)
+            } else {
+                setMessage('terjadi kesalahan')
+            }
+            
+        }
     }
     return (
         <RegistrationComponent>
@@ -55,7 +66,7 @@ export default function Register(){
 
                         <label className="text-sm" htmlFor="confirmPassword">Konfirmasi Password</label>
                         <input value={fieldPasswordConfirmation} onChange={(event) => setFieldPasswordConfirmation(event.target.value)} type="password" name="confirmPassword" id="confirmPassword" className="rounded w-full border-[0.5px] border-gray-400 focus:outline-none px-2 py-1" />
-
+                        <p className={`${message ? 'text-center my-4 text-red-600 text-sm' : 'hidden'}`}>{message}</p>
                         <button className="p-1 bg-primary text-white text-center rounded mt-2">Daftar</button>
                         <Link href="/auth/login" className="underline text-gray-500 hover:text-gray-700 text-sm mt-1">Sudah punya akun?</Link>
                 </form>
