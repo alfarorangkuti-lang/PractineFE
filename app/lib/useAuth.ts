@@ -1,39 +1,68 @@
 'use client'
+import useSWR from "swr";
 import { useEffect, useState } from "react";
 import { getUser } from "./api";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation"
 
-export const useAuth = (middleware?: "auth" | "guest") => {
+interface User {
+  name: string
+  business_name: string
+  email: string
+  created_at: string
+  email_verified_at:string
+  is_paid:boolean
+}
+
+
+export const useAuth = (options? : {middleware?: 'auth' | 'guest'}) => {
+    const {data:user, error, isLoading, mutate} = useSWR<User | null>("user", getUser, {
+      shouldRetryOnError: false,
+      revalidateOnFocus: false,
+    }
+)
+    const pathname = usePathname()
     const router = useRouter()
-    const [user, setUser] = useState<any>(null)
-    const [loading, setLoading] = useState<boolean>(true)
-
     useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const data = await getUser()
-                setUser(data)
-                if (!data.email_verified_at) {
-                    router.push('/auth/verification')
-                } 
-                
-                if (data.email_verified_at && !data.is_paid){
-                    router.push('/auth/payment')
+            const fetchUser = async () => {
+                try {
+                    if (isLoading) return
+
+                    if (options?.middleware === 'auth' && !user) {
+                        router.push('/auth/login')
+                    }
+
+                    if (options?.middleware === 'guest' && user) {
+                        router.push('/authed/dashboard')
+                    }
+
+                    if (options?.middleware === 'auth') {
+                        if (!user?.email_verified_at && pathname !== '/auth/verification' && pathname !== '/auth/userPage') {
+                        router.push('/auth/verification')
+                        return
+                        }
+
+                        if (!user?.is_paid && pathname !== '/auth/payment' && pathname !== '/auth/userPage' && user?.email_verified_at) {
+                        router.push('/auth/payment')
+                        return
+                        }
+                    }
+                    
+                } catch(err: any) {
+                    if (options?.middleware === "auth") {
+                        router.push('/auth/login')
+                    }
+                } finally {
                 }
-                if (data.email_verified_at && data.is_paid){
-                    router.push('/authed/dashboard')
-                }
-            } catch(err: any) {
-                if (middleware === "auth") {
-                    router.push('/auth/login')
-                }
-            } finally {
-                setLoading(false)
             }
-        }
 
-        fetchUser()
-    }, [])
+            fetchUser()
+        }, [user, isLoading, options])
+    return {
+        user,
+        isLoading,
+        isError:error,
+        mutateUser:mutate,
+    }
 
-    return {user, loading}
 }

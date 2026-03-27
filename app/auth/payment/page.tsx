@@ -7,13 +7,14 @@ import { useRouter } from "next/navigation"
 
 
 export default function Payment(){
-    useAuth('auth')
     const router = useRouter()
+    const {mutateUser} = useAuth({middleware:'auth'})
     const handleLogout = async () =>{
         const data = await logout()
         if(data.success){
             localStorage.removeItem('token')
-            return router.push('/auth/login')
+            await mutateUser(null, false)
+            router.push('/auth/login')
         }
     }
     return (

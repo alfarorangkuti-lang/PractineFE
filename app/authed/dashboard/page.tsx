@@ -1,7 +1,7 @@
 'use client'
 import { useAuth } from "@/app/lib/useAuth";
 export default function Dashboard() {
-  useAuth('auth')
+  useAuth({middleware:'auth'})
   return (
     <div>
       dashboard

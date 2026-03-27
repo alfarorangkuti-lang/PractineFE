@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from 'next/navigation'
+import { useAuth } from "@/app/lib/useAuth";
 export default function NavbarLandingPage() {
+  const {user} = useAuth()
   const pathname = usePathname()
 
   const [isOpen, setIsOpen] = useState(false);
@@ -34,11 +36,11 @@ export default function NavbarLandingPage() {
 
       {/* Actions */}
       <div className="flex items-center gap-4">
-        <Link href="/auth/login" className="hidden md:flex text-white text-sm hover:opacity-80 transition">
-          Login
+        <Link href={`${user ? '/auth/userPage' : '/auth/login'}`} className="hidden md:flex text-white text-sm hover:opacity-80 transition">
+          {user ? user.business_name : 'Login'}
         </Link>
-        <Link href="/auth/register" className="hidden md:flex bg-black text-white text-sm px-4 py-2 rounded-lg hover:opacity-80 transition">
-          Daftar
+        <Link href={`${user ? '/authed/dashboard' : '/auth/register'}`} className="hidden md:flex bg-black text-white text-sm px-4 py-2 rounded-lg hover:opacity-80 transition">
+          {user ? 'Dashboard' : 'Daftar'}
         </Link>
         <button onClick={() => setIsOpen(!isOpen)} className="flex md:hidden bg-black text-white text-sm px-4 py-2 rounded-lg hover:opacity-80 transition">
           🔷
