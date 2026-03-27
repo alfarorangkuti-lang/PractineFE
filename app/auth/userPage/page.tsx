@@ -14,6 +14,9 @@ interface User{
 export default function UserPage() {
     const {user, mutateUser} = useAuth({middleware:'auth'})
     const router = useRouter()
+
+    let tanggal = user?.created_at
+
     const handleLogout = async() => {
         const res = await logout()
         if (res.message) {
@@ -52,7 +55,7 @@ export default function UserPage() {
                     <div>
                         <p className="text-sm text-gray-500">Tanggal Bergabung</p>
                         <p className="text-sm font-medium">
-                            {new Date(user?.created_at).toLocaleDateString("id-ID", {
+                            {new Date(tanggal || "").toLocaleDateString("id-ID", {
                                 day: "numeric",
                                 month: "long",
                                 year: "numeric",
