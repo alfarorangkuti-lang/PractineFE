@@ -46,3 +46,10 @@ export const resendEmailVerification = async() => {
     const res = await axiosClient.post('/email/verification-notification')
     return res.data
 }
+
+
+export const handleFirstSubscription = async () => {
+    const res = await axiosClient.post('/firstSubs')
+    const token = res.data.snap_token
+    return token
+}

@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const axiosClient = axios.create({
-    baseURL: "https://api.karawanggadget.com/api/",
+    baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
     headers: {
         "Content-Type": "application/json",
         Accept: "application/json",

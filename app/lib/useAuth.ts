@@ -5,13 +5,22 @@ import { getUser } from "./api";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation"
 
+interface PaymentHistory {
+    id:number
+    month_amount:string
+    pay_amount:number
+    expired_at:string
+    created_at:string
+    status:string
+}
+
 interface User {
   name: string
   business_name: string
   email: string
   created_at: string
   email_verified_at:string
-  is_paid:boolean
+  payment_history:PaymentHistory[]
 }
 
 
@@ -28,25 +37,48 @@ export const useAuth = (options? : {middleware?: 'auth' | 'guest'}) => {
                 try {
                     if (isLoading) return
 
-                    if (options?.middleware === 'auth' && !user) {
-                        router.push('/auth/login')
-                    }
-
                     if (options?.middleware === 'guest' && user) {
-                        router.push('/authed/dashboard')
+                    router.push('/authed/dashboard')
+                    return
                     }
 
+                    // ===== AUTH =====
                     if (options?.middleware === 'auth') {
-                        if (!user?.email_verified_at && pathname !== '/auth/verification' && pathname !== '/auth/userPage') {
+
+                    // belum login
+                    if (!user) {
+                        router.push('/auth/login')
+                        return
+                    }
+
+                    const isVerified = !!user.email_verified_at
+                    const hasPayment = user.payment_history?.some(
+                    (p) => p.status === 'paid'
+                    ) ?? false
+
+                    const isVerificationPage = pathname === '/auth/verification'
+                    const isPaymentPage = pathname === '/auth/payment'
+                    const isUserPage = pathname === '/auth/userPage'
+
+                    // ❌ belum verifikasi
+                    if (!isVerified && !isVerificationPage && !isUserPage) {
                         router.push('/auth/verification')
                         return
-                        }
+                    }
 
-                        if (!user?.is_paid && pathname !== '/auth/payment' && pathname !== '/auth/userPage' && user?.email_verified_at) {
+                    // ❌ belum bayar
+                    if (isVerified && !hasPayment && !isPaymentPage && !isUserPage) {
                         router.push('/auth/payment')
                         return
-                        }
                     }
+
+                    // ✅ sudah bayar & verified → jangan balik ke auth pages
+                    if (isVerified && hasPayment && (isVerificationPage || isPaymentPage)) {
+                        router.push('/authed/dashboard')
+                        return
+                    }
+                    }
+                    
                     
                 } catch(err: any) {
                     if (options?.middleware === "auth") {

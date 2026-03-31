@@ -1,5 +1,5 @@
 'use client'
-
+      
 import { Inter } from "next/font/google";
 import "./globals.css";
 
@@ -15,6 +15,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full antialiased">
+
+
       <title>Practine</title>
       <body className={`${inter.className} min-h-full flex flex-col`}>
         {children}
