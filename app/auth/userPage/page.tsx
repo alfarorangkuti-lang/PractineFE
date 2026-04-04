@@ -119,7 +119,7 @@ export default function UserPage() {
                             <div className="text-center">
                                 <p className="text-gray-600">Dibayar pada</p>
                                 <p className="text-gray-800 font-medium">
-                                    {formatDate(user?.payment_history?.[0]?.created_at)}
+                                    -
                                 </p>
                             </div>
 
