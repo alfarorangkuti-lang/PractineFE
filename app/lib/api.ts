@@ -1,3 +1,4 @@
+import axios from "axios";
 import axiosClient from "./axios";
 
 
@@ -52,4 +53,15 @@ export const handleFirstSubscription = async () => {
     const res = await axiosClient.post('/firstSubs')
     const token = res.data.snap_token
     return token
+}
+
+export const testPayment = async() => {
+    const req = await axiosClient.post('testPayment')
+    return req.status
+}
+
+export const getTokenSubscription = async(monthAmount:number) => {
+    const req = await axiosClient.post('/subscribe', {monthAmount:monthAmount})
+    const res = req.data.snap_token
+    return res
 }

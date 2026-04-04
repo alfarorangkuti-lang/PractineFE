@@ -37,7 +37,7 @@ export default function NavbarLandingPage() {
       {/* Actions */}
       <div className="flex items-center gap-4">
         <Link href={`${user ? '/auth/userPage' : '/auth/login'}`} className="hidden md:flex text-white text-sm hover:opacity-80 transition">
-          {user ? user.business_name : 'Login'}
+          {user ? user.tenant.business_name : 'Login'}
         </Link>
         <Link href={`${user ? '/authed/dashboard' : '/auth/register'}`} className="hidden md:flex bg-black text-white text-sm px-4 py-2 rounded-lg hover:opacity-80 transition">
           {user ? 'Dashboard' : 'Daftar'}

@@ -5,22 +5,19 @@ import { getUser } from "./api";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation"
 
-interface PaymentHistory {
+
+interface Tenant {
     id:number
-    month_amount:string
-    pay_amount:number
+    business_name:string
     expired_at:string
-    created_at:string
-    status:string
 }
 
 interface User {
   name: string
-  business_name: string
   email: string
   created_at: string
   email_verified_at:string
-  payment_history:PaymentHistory[]
+  tenant:Tenant
 }
 
 
@@ -52,9 +49,7 @@ export const useAuth = (options? : {middleware?: 'auth' | 'guest'}) => {
                     }
 
                     const isVerified = !!user.email_verified_at
-                    const hasPayment = user.payment_history?.some(
-                    (p) => p.status === 'paid'
-                    ) ?? false
+                    const hasPayment = user.tenant.expired_at ?? false
 
                     const isVerificationPage = pathname === '/auth/verification'
                     const isPaymentPage = pathname === '/auth/payment'

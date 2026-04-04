@@ -1,6 +1,6 @@
 'use client'
 import RegistrationComponent from "@/app/component/auth/registrationComponent"
-import { handleFirstSubscription, logout } from "@/app/lib/api"
+import { handleFirstSubscription, logout, testPayment } from "@/app/lib/api"
 import { useAuth } from "@/app/lib/useAuth"
 import Script from "next/script"
 import { useRouter } from "next/navigation"
@@ -12,6 +12,13 @@ export default function Payment(){
     const router = useRouter()
     const {mutateUser} = useAuth({middleware:'auth'})
     const [token, setToken] = useState<string>('')
+    
+    
+    // payment dummy
+    const test = async() => {
+        const status = await testPayment()
+        console.log(status)
+    }
 
     const getToken = async() => {
             const snapToken = await handleFirstSubscription()
