@@ -65,3 +65,21 @@ export const getTokenSubscription = async(monthAmount:number) => {
     const res = req.data.snap_token
     return res
 }
+
+export const getSupplier = async(orderBy:string = '', sortBy:string = '', searchParam:string = '' ) => {
+    const req = await axiosClient.get(`/supplier?search=${searchParam}&order=${orderBy}&by=${sortBy}`)
+    const res = req.data
+    return res
+}
+
+export const getStockParent = async(orderBy:string = '', sortBy:string = '', searchParam:string = '' ) => {
+    const req = await axiosClient.get(`/stock-parent?search=${searchParam}&order=${orderBy}&by=${sortBy}`)
+    const res = req.data.data
+    return res
+}
+
+export const getCustomField = async() => {
+    const req = await axiosClient.get('/custom-field')
+    const res = req.data
+    return res
+}
