@@ -72,6 +72,29 @@ export const getSupplier = async(orderBy:string = '', sortBy:string = '', search
     return res
 }
 
+export const getSupplierById = async(ids:string|null) => {
+    const req = await axiosClient.get(`/supplierEdit?ids=${ids}`)
+    const res = req.data
+    return res
+}
+
+export const addSupplier = async(data:string[]) => {
+    const req = await axiosClient.post('/supplier', {names: data})
+    const res = req.data
+    return res
+}
+
+export const editSupplier = async (data: { id: number; name: string }[]) => {
+        try {
+            const req = await axiosClient.put('/supplier', { data });
+            return req.data;
+        } catch (error: any) {
+            return error.response?.data || {
+                message: 'Terjadi kesalahan'
+            };
+        }
+    };
+
 export const getStockParent = async(orderBy:string = '', sortBy:string = '', searchParam:string = '' ) => {
     const req = await axiosClient.get(`/stock-parent?search=${searchParam}&order=${orderBy}&by=${sortBy}`)
     const res = req.data.data

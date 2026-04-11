@@ -6,7 +6,7 @@ import { getSupplier } from "@/app/lib/api";
 import { isSea } from "node:sea";
 
 
-export default function Stock(){
+export default function Supplier(){
     const [search, setSearch] = useState<string>('')
     const [orderBy, setOrderBy] = useState<string>('')
     const [sortBy, setSortBy] = useState<string>('')
@@ -14,11 +14,16 @@ export default function Stock(){
     const [isSearch, setIsSearch] = useState<boolean>(true)
     const [value, setValue] = useState<string>('urutkan')
     const [dataSupplier, setDataSupplier] = useState<any[]>([])
+    const [message, setMessage] = useState<string>()
 
     useEffect(() => {
         const fetchData = async() => {
             const supplier = await getSupplier(orderBy, sortBy, search);
-            setDataSupplier(supplier)
+            setDataSupplier(supplier)                
+            
+            if (supplier.message) {
+                setMessage(supplier.message)
+            }
         }
 
         fetchData()
@@ -29,14 +34,18 @@ export default function Stock(){
     return (
         <LayoutAuthed>
         <div className="flex justify-between items-center">
-        <h1 className="border-l border-l-gray-400 px-2 text-xl font-semibold tracking-tight">Supplier list</h1>
-        <button className="p-2 rounded-lg border-[0.5px] border-gray-300 text-sm bg-gray-800 text-gray-100">Tambah baru+</button>
+            <div className="flex items-center gap-2">
+                <button onClick={() => router.push('/authed/stock')} className="p-2  text-sm rounded-lg cursor-pointer active:scale-90 transition duration-150 flex gap-2 items-center"> <i className="fa fa-chevron-left"></i> <p>Stok</p></button>
+                <h1 className="border-l-2 border-l-gray-400 px-2 text-xl font-semibold tracking-tight">Supplier list</h1>
+            </div>
+            <button onClick={() => router.push('/authed/stock/supplier/add')} className="p-2 cursor-pointer active:scale-90 duration-300 trasition rounded-lg border-[0.5px] border-gray-300 text-sm bg-gray-800 text-gray-100">Tambah baru+</button>
         </div>
+
         <div className="flex justify-between gap-2 mt-4 px-4 py-2 border-[0.5px] border-gray-300 rounded-t-xl">
             
 
             <div className="flex gap-2">
-                <button onClick={() => router.push('/authed/stock')} className="px-2 border-[0.5px] border-gray-300 text-sm rounded-lg cursor-pointer active:scale-90 transition duration-150 flex gap-2 items-center"> <i className="fa fa-chevron-left"></i> <p>Stok</p></button>
+                
             </div>
             
             <div className="flex gap-2 items-center"> 
@@ -103,7 +112,7 @@ export default function Stock(){
                     </thead>
 
                     <tbody className="divide-y divide-gray-300">
-                        {dataSupplier.map((item, index) => (
+                        {dataSupplier?.map((item, index) => (
                             <tr key={index} className="hover:bg-gray-50 transition">
                                 <td className="px-4 py-3"><input type="checkbox" name="" id="" /></td>
                                 <td className="px-4 py-3">{index + 1}</td>
@@ -111,7 +120,7 @@ export default function Stock(){
                                 <td className="px-4 py-3">{item.inventory_count}</td>
                                 <td className="px-4 py-3">{new Date(item.created_at).toLocaleDateString('id-ID')}</td>
                                 <td className="px-4 py-3 flex gap-2 justify-center">
-                                    <button className="px-3 py-1 text-xs  text-blue-600 border border-gray-300 cursor-pointer rounded-lg "><i className="fa fa-edit"></i></button>
+                                    <button onClick={() => router.push(`/authed/stock/supplier/edit?ids=${item.id}`)} className="px-3 py-1 text-xs  text-blue-600 border border-gray-300 cursor-pointer rounded-lg "><i className="fa fa-edit"></i></button>
                                     <button className="px-3 py-1 text-xs text-red-600 border border-gray-300 cursor-pointer rounded-lg "><i className="fa fa-trash-o"></i></button>
                                 </td>
                             </tr>
