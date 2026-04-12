@@ -6,6 +6,8 @@ import { login } from "@/app/lib/api";
 import { useAuth } from "@/app/lib/useAuth";
 import { useRouter } from "next/navigation";
 import LayoutLandingPage from "@/app/component/public/layoutLandingPage";
+
+
 export default function Login(){
     const router = useRouter()
     const [email, setEmail] = useState<string>('');

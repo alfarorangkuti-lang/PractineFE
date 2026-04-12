@@ -72,7 +72,7 @@ export const getSupplier = async(orderBy:string = '', sortBy:string = '', search
     return res
 }
 
-export const getSupplierById = async(ids:string|null) => {
+export const getSupplierById = async(ids:string|undefined|string[]) => {
     const req = await axiosClient.get(`/supplierEdit?ids=${ids}`)
     const res = req.data
     return res
